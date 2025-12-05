@@ -148,7 +148,7 @@ with st.sidebar:
 # ==========================================
 # 4. 主畫面
 # ==========================================
-st.markdown("<h1 class='title-text'>🌍 全球遊戲廣告素材指揮官</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='title-text'>🌍 遊戲廣告素材腳本產生器</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: #94A3B8;'>V14.0 視覺戰略版：多模態調研 • 視覺風格分析</p>", unsafe_allow_html=True)
 
 # ------------------------------------------
@@ -157,7 +157,7 @@ st.markdown("<p style='text-align: center; color: #94A3B8;'>V14.0 視覺戰略�
 st.markdown('<div class="step-header">STEP 1: 遊戲視覺與戰略調研</div>', unsafe_allow_html=True)
 
 c_g1, c_g2 = st.columns([2, 1])
-with c_g1: game_name_input = st.text_input("🎮 遊戲名稱", placeholder="Ex: 絕區零")
+with c_g1: game_name_input = st.text_input("🎮 遊戲名稱", placeholder="Ex: High seas hero")
 with c_g2: platform_input = st.selectbox("🕹️ 遊戲平台", ["手機遊戲", "PC/Steam", "主機", "網頁遊戲"])
 
 # [新增] 上傳遊戲截圖
