@@ -13,7 +13,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 # 1. 頁面配置與 CSS
 # ==========================================
 st.set_page_config(
-    page_title="全球遊戲廣告素材指揮官 (V14.0 視覺戰略版)",
+    page_title="遊戲廣告素材腳本產生器",
     page_icon="👁️",
     layout="wide",
     initial_sidebar_state="expanded"
