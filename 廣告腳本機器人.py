@@ -5,7 +5,6 @@ import random
 from PIL import Image
 import datetime
 import io
-# 僅保留 Word 相關套件
 from docx import Document
 from docx.shared import Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -14,8 +13,8 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 # 1. 頁面配置與 CSS
 # ==========================================
 st.set_page_config(
-    page_title="全球遊戲廣告素材指揮官 (V12.0 最終版)",
-    page_icon="🎬",
+    page_title="全球遊戲廣告素材指揮官 (V14.0 視覺戰略版)",
+    page_icon="👁️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -27,12 +26,12 @@ st.markdown("""
     
     /* 標題特效 */
     .title-text { 
-        color: #F472B6; 
+        color: #2DD4BF; 
         text-align: center; 
         font-weight: 800; 
         letter-spacing: 2px; 
         font-size: 2.5em; 
-        text-shadow: 0 0 20px rgba(244, 114, 182, 0.4); 
+        text-shadow: 0 0 20px rgba(45, 212, 191, 0.4); 
     }
     
     /* 步驟標題 */
@@ -40,10 +39,10 @@ st.markdown("""
         background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%);
         padding: 15px;
         border-radius: 8px;
-        border-left: 5px solid #F472B6;
+        border-left: 5px solid #2DD4BF;
         font-size: 1.2em;
         font-weight: bold;
-        color: #F472B6;
+        color: #2DD4BF;
         margin-top: 20px;
         margin-bottom: 15px;
     }
@@ -73,70 +72,43 @@ if 'final_script_data' not in st.session_state: st.session_state.final_script_da
 def generate_docx(game_name, strategy, scenes_data):
     doc = Document()
     
-    # 文件標題
     heading = doc.add_heading(f'廣告腳本企劃書: {game_name}', 0)
     heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
     
-    # 策略分析
     doc.add_heading('🧠 行銷心理戰略', level=1)
     p_strat = doc.add_paragraph(strategy)
     p_strat.paragraph_format.space_after = Pt(12)
     
-    # 分鏡腳本
     doc.add_heading('📋 分鏡詳細腳本', level=1)
     
     for i, scene in enumerate(scenes_data):
-        # 場景標題
         doc.add_heading(f'Scene {i+1} ({scene.get("Time", "N/A")})', level=2)
-        
-        # 內容
         p = doc.add_paragraph()
-        p.paragraph_format.line_spacing = 1.5  # 設定行距
+        p.paragraph_format.line_spacing = 1.5
         
-        # 畫面
-        run = p.add_run('🎥 畫面: ')
-        run.bold = True
-        run.font.color.rgb = RGBColor(0, 0, 0)
+        run = p.add_run('🎥 畫面: '); run.bold = True; run.font.color.rgb = RGBColor(0, 0, 0)
         p.add_run(f"{scene.get('Visual', '')}\n")
         
-        # 壓字
-        run = p.add_run('📝 壓字: ')
-        run.bold = True
+        run = p.add_run('📝 壓字: '); run.bold = True
         p.add_run(f"{scene.get('Text', '')}\n")
         
-        # 旁白
         if scene.get('Voiceover') not in ["None", "無"]:
-            run = p.add_run('🗣️ 旁白: ')
-            run.bold = True
-            run.font.color.rgb = RGBColor(0, 112, 192) # 藍色
+            run = p.add_run('🗣️ 旁白: '); run.bold = True; run.font.color.rgb = RGBColor(0, 112, 192)
             p.add_run(f"{scene.get('Voiceover', '')}\n")
             
-        # 對話
         if scene.get('Dialogue') not in ["None", "無"]:
-            run = p.add_run('💬 對話: ')
-            run.bold = True
-            run.font.color.rgb = RGBColor(112, 48, 160) # 紫色
+            run = p.add_run('💬 對話: '); run.bold = True; run.font.color.rgb = RGBColor(112, 48, 160)
             p.add_run(f"{scene.get('Dialogue', '')}\n")
             
-        # 音效
-        run = p.add_run('🔊 音效: ')
-        run.bold = True
-        run.font.color.rgb = RGBColor(192, 0, 0) # 紅色
+        run = p.add_run('🔊 音效: '); run.bold = True; run.font.color.rgb = RGBColor(192, 0, 0)
         p.add_run(f"{scene.get('SFX', '')}\n")
         
-        # Video Prompt (特別標註)
         p_prompt = doc.add_paragraph()
-        run_label = p_prompt.add_run('Video AI Prompt: ')
-        run_label.bold = True
-        run_label.font.size = Pt(9)
-        run_text = p_prompt.add_run(f"{scene.get('Video Prompt', '')}")
-        run_text.italic = True
-        run_text.font.size = Pt(9)
-        run_text.font.color.rgb = RGBColor(80, 80, 80)
+        run_label = p_prompt.add_run('Video AI Prompt: '); run_label.bold = True; run_label.font.size = Pt(9)
+        run_text = p_prompt.add_run(f"{scene.get('Video Prompt', '')}"); run_text.italic = True; run_text.font.size = Pt(9); run_text.font.color.rgb = RGBColor(80, 80, 80)
         
-        doc.add_paragraph() # 空行
+        doc.add_paragraph()
 
-    # 存入記憶體
     buffer = io.BytesIO()
     doc.save(buffer)
     buffer.seek(0)
@@ -177,33 +149,51 @@ with st.sidebar:
 # 4. 主畫面
 # ==========================================
 st.markdown("<h1 class='title-text'>🌍 全球遊戲廣告素材指揮官</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #94A3B8;'>V12.0 最終定版：戰略調研 • 自由生成 • Word 匯出</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #94A3B8;'>V14.0 視覺戰略版：多模態調研 • 視覺風格分析</p>", unsafe_allow_html=True)
 
 # ------------------------------------------
 # STEP 1: 遊戲調研 (Research)
 # ------------------------------------------
-st.markdown('<div class="step-header">STEP 1: 遊戲戰略調研</div>', unsafe_allow_html=True)
+st.markdown('<div class="step-header">STEP 1: 遊戲視覺與戰略調研</div>', unsafe_allow_html=True)
 
 c_g1, c_g2 = st.columns([2, 1])
 with c_g1: game_name_input = st.text_input("🎮 遊戲名稱", placeholder="Ex: 絕區零")
 with c_g2: platform_input = st.selectbox("🕹️ 遊戲平台", ["手機遊戲", "PC/Steam", "主機", "網頁遊戲"])
 
-if st.button("🕵️ 進行調研"):
+# [新增] 上傳遊戲截圖
+uploaded_game_img = st.file_uploader("📸 (選填) 上傳遊戲截圖或海報，讓 AI 精準分析美術風格", type=["jpg", "png", "jpeg"])
+
+if st.button("👁️ 啟動視覺調研引擎"):
     if not st.session_state.is_connected or not game_name_input:
         st.warning("請先連線並輸入遊戲名稱")
     else:
         model = genai.GenerativeModel(selected_model)
-        with st.spinner(f"正在分析《{game_name_input}》..."):
-            prompt = f"""
+        with st.spinner(f"正在分析《{game_name_input}》的玩法與美術風格..."):
+            
+            # 根據是否有圖，動態調整 Prompt
+            base_prompt = f"""
             Analyze game "{game_name_input}" on "{platform_input}".
+            
+            **Task:**
+            1. Identify Genre & Core Loop.
+            2. Identify 3 USP (Unique Selling Points).
+            3. **Visual Analysis:** Describe the art style, color palette, UI style, and character proportions in detail.
+            
             Output strictly in Traditional Chinese:
             Genre: [類型]
             Core Loop: [核心玩法]
             USP: [3個賣點]
-            Visual Style: [美術風格]
+            Visual Style: [美術風格 - 詳細描述]
             """
+            
+            inputs = [base_prompt]
+            if uploaded_game_img:
+                img = Image.open(uploaded_game_img)
+                inputs.append(img) # 加入圖片進行多模態分析
+                inputs.append("Analyze the uploaded image to pinpoint the specific Visual Style.")
+
             try:
-                res = model.generate_content(prompt)
+                res = model.generate_content(inputs)
                 st.session_state.game_analysis_result = {
                     "name": game_name_input,
                     "platform": platform_input,
@@ -215,11 +205,11 @@ if st.button("🕵️ 進行調研"):
 
 if st.session_state.current_step >= 2:
     st.markdown('<div class="box-style">', unsafe_allow_html=True)
-    st.info("👇 AI 的遊戲認知 (請確認或修正)")
+    st.info("👇 AI 的遊戲戰略認知 (美術風格已根據調研更新)")
     game_profile_user_edit = st.text_area(
         "📝 遊戲戰略檔案:",
         value=st.session_state.game_analysis_result.get("raw_analysis", ""),
-        height=120
+        height=150
     )
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -229,12 +219,10 @@ if st.session_state.current_step >= 2:
 if st.session_state.current_step >= 2:
     st.markdown('<div class="step-header">STEP 2: 創意生成</div>', unsafe_allow_html=True)
 
-    # Row 1: 基礎設定
     c1, c2 = st.columns(2)
     with c1: target_region = st.selectbox("🌐 投放地區", ["台灣 (繁中)", "日本 (日文)", "美國 (英文)", "韓國 (韓文)", "中國大陸 (簡中)", "東南亞"])
     with c2: duration = st.select_slider("⏱️ 廣告時長", options=[15, 30, 45, 60], value=30)
 
-    # Row 2: 風格與形式
     c3, c4 = st.columns(2)
     with c3:
         tone_sel = st.selectbox("🎭 影片風格", ["搞笑諧音", "熱血中二", "懸疑驚悚", "感人共鳴", "專業硬核", "✨ 自定義"])
@@ -243,19 +231,21 @@ if st.session_state.current_step >= 2:
         fmt_sel = st.selectbox("📢 腳本形式", ["戰力飆升", "失敗挑戰", "CG 動畫大片", "實機試玩", "真人情境劇", "✨ 自定義"])
         ad_format = st.text_input("✍️ 自定義形式", placeholder="Ex: 靈魂互換") if fmt_sel == "✨ 自定義" else fmt_sel
 
-    # Row 3: 受眾心理
-    st.markdown("<b>🎯 受眾心理 (Psychology)</b>", unsafe_allow_html=True)
-    t1, t2, t3, t4 = st.columns(4)
-    with t1: ta_gender = st.selectbox("👤 性別", ["不限", "男性", "女性"])
-    with t2: ta_age = st.slider("🎂 年齡", 12, 60, (25, 35))
-    with t3: ta_identity = st.text_input("💼 身分", value="上班族")
-    with t4: ta_holiday = st.text_input("🎉 節慶", value="平日")
+    st.markdown("<b>🎯 受眾與情境</b>", unsafe_allow_html=True)
+    col_demo, col_context = st.columns([3, 2])
+    with col_demo:
+        t1, t2, t3 = st.columns(3)
+        with t1: ta_gender = st.selectbox("👤 性別", ["不限", "男性", "女性"])
+        with t2: ta_age = st.slider("🎂 年齡", 12, 60, (25, 35))
+        with t3: ta_identity = st.text_input("💼 身分", value="上班族")
+    with col_context:
+        t4, t5 = st.columns(2)
+        with t4: ta_time = st.selectbox("⏰ 投放時段", ["通勤/上學 (早上)", "午休時間 (中午)", "下班/放學 (晚上)", "深夜時段 (半夜)", "全天候"])
+        with t5: ta_holiday = st.text_input("🎉 節慶", value="平日")
 
-    # Row 4: 筆記
     with st.expander("📝 導演筆記 (補充指令)"):
         custom_req = st.text_area("特殊需求...", placeholder="Ex: 結局要有反轉")
 
-    # 生成
     if st.button("🚀 生成腳本"):
         model = genai.GenerativeModel(selected_model)
         
@@ -263,22 +253,23 @@ if st.session_state.current_step >= 2:
         Act as a Creative Director.
         
         **INPUTS:**
-        - Game Profile: {game_profile_user_edit}
+        - Game Profile (Visuals Analyzed): {game_profile_user_edit}
         - Region: {target_region}
         - Duration: {duration}s
         - Tone: {ad_tone}
         - Format: {ad_format}
         - Audience: {ta_identity} ({ta_gender}, Age {ta_age[0]}-{ta_age[1]})
-        - Context: {ta_holiday}
+        - Context: Time: {ta_time}, Holiday: {ta_holiday}
         - User Note: {custom_req}
         
         **TASK:**
-        1. **Psych Strategy:** Map Game USP to User Pain Points.
+        1. **Psych Strategy:** Map USP to Pain Points.
         2. **Script:** Scene-by-scene breakdown.
-           - Voiceover/Dialogue: Native Language of {target_region}.
-           - Visuals: Traditional Chinese.
-           - Audio: Separate Voiceover (Narrator) from Dialogue (Character) and SFX.
-        3. **Video Prompt:** English for Sora/Veo3 (Focus on Motion & Physics).
+           - Voiceover/Dialogue: Native Language.
+           - Visuals: Traditional Chinese (Must align with Analyzed Visual Style).
+           - Audio: Separate Voiceover/Dialogue/SFX.
+        3. **Video Prompt:** English for Sora/Veo3.
+           - CRITICAL: Incorporate the "Visual Style" from Game Profile into the prompt keywords.
         
         **OUTPUT FORMAT (Separator '|||'):**
         
@@ -310,7 +301,6 @@ if st.session_state.current_step >= 2:
                     strategy = "無策略分析"
                     scenes_raw = full_text.split("|||")
                 
-                # 解析結構化數據
                 parsed_scenes = []
                 for scene in scenes_raw:
                     if len(scene.strip()) < 10: continue
@@ -321,7 +311,6 @@ if st.session_state.current_step >= 2:
                             if f"{k}:" in line: data[k] = line.split(":", 1)[1].strip()
                     parsed_scenes.append(data)
                 
-                # 存入 Session
                 st.session_state.final_script_data = {
                     "strategy": strategy,
                     "scenes": parsed_scenes,
@@ -333,12 +322,11 @@ if st.session_state.current_step >= 2:
                 st.error(f"生成錯誤: {e}")
 
 # ------------------------------------------
-# STEP 3: 預覽與下載 (Export)
+# STEP 3: 顯示與下載 (Export)
 # ------------------------------------------
 if st.session_state.final_script_data:
     data = st.session_state.final_script_data
     
-    # 預覽區
     st.markdown(f'<div class="box-style" style="border-left:4px solid #38BDF8;"><h3>🧠 策略</h3>{data["strategy"]}</div><br>', unsafe_allow_html=True)
     
     for i, scene in enumerate(data['scenes']):
@@ -367,7 +355,6 @@ if st.session_state.final_script_data:
                     url = f"https://image.pollinations.ai/prompt/{clean_p}?width={w}&height={h}&seed={seed}&nologo=true&model=flux"
                     st.image(url, caption=f"視覺示意 ({ratio})", use_container_width=True)
 
-    # 匯出區
     st.markdown('<div class="step-header">STEP 3: 商業文件匯出 (Word)</div>', unsafe_allow_html=True)
     
     docx_file = generate_docx(data['game_name'], data['strategy'], data['scenes'])
@@ -381,4 +368,4 @@ if st.session_state.final_script_data:
             mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         )
     with col_dl_info:
-        st.info("💡 下載後為標準 Word 格式，包含完整策略、分鏡與 AI 指令，可直接編輯或另存為 PDF。")
+        st.info("💡 包含完整策略、分鏡與 AI 指令。")
